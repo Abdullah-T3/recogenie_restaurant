@@ -73,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             _buildProfileHeader(
                               deviceInfo,
-                              state.user.displayName,
+                              state.user.displayName ?? 'User',
                             ),
                             SizedBox(height: deviceInfo.screenHeight * 0.02),
                             _buildUserInfo(deviceInfo, state.user),

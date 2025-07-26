@@ -20,8 +20,9 @@ void main() async {
   }
 
   await Firebase.initializeApp();
-  //addMenuData(); //todo Uncomment to add initial menu data
   configureDependencies();
+  //addMenuData(); //todo Uncomment to add initial menu data
+
   runApp(const MyApp());
 }
 
@@ -128,10 +129,10 @@ void addMenuData() async {
         'category': 'Desserts',
       },
       {
-        'name': 'Coca Cola',
+        'name': 'V7 cola',
         'price': 2.99,
         'imageUrl':
-            'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=400&h=300&fit=crop',
+            'https://res.cloudinary.com/da7lxmvto/image/upload/v1753517235/597ca5ff-1ca6-4271-8310-9d7bf80cee25_w3fs1c.jpg',
         'description': 'Refreshing carbonated soft drink',
         'category': 'Beverages',
       },

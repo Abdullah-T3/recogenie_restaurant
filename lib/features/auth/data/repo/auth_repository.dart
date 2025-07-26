@@ -18,12 +18,19 @@ class AuthRepository {
     }
   }
 
-  Future<User?> signUpWithEmail(String email, String password) async {
+  Future<User?> signUpWithEmail(
+    String email,
+    String password,
+    String fullName,
+  ) async {
     try {
       final result = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      // ignore: deprecated_member_use
+      await result.user?.updateProfile(displayName: fullName);
+      await result.user?.reload(); // Reload to get updated user info
       return result.user;
     } catch (e) {
       throw Exception('Error during sign up: $e');

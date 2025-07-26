@@ -4,7 +4,7 @@ import '../../data/repo/cart_repository.dart';
 import '../../data/models/cart_item.dart';
 import 'cart_state.dart';
 
-@injectable
+@singleton
 class CartCubit extends Cubit<CartState> {
   final CartRepository _cartRepository;
 

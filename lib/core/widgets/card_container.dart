@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../theme/app_theme.dart';
 
 class CardContainer extends StatelessWidget {
   final Widget child;
@@ -10,14 +10,14 @@ class CardContainer extends StatelessWidget {
   final Border? border;
 
   const CardContainer({
-    Key? key,
+    super.key,
     required this.child,
     this.padding,
     this.borderRadius = 16,
     this.backgroundColor,
     this.boxShadow,
     this.border,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

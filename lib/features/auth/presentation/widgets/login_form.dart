@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
-import 'custom_text_field.dart';
-import 'gradient_button.dart';
-import 'card_container.dart';
+import '../../../../core/widgets/custom_text_field.dart';
+import '../../../../core/widgets/gradient_button.dart';
+import '../../../../core/widgets/card_container.dart';
 import '../../../../core/helper/FormValidator/Validator.dart';
 
 class LoginForm extends StatefulWidget {
@@ -77,6 +77,7 @@ class _LoginFormState extends State<LoginForm> {
             icon: Icons.login,
             isLoading: widget.isLoading,
             onPressed: widget.onLogin,
+            deviceinfo: widget.deviceInfo,
           ),
         ],
       ),

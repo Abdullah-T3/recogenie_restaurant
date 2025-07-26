@@ -3,6 +3,7 @@
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -49,16 +50,16 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyA3nVMhInnmbqM_t7MoC9bFlxUfCFc-qEE',
+  static final FirebaseOptions android = FirebaseOptions(
+    apiKey: dotenv.env['API_KEY_android']!,
     appId: '1:459443909960:android:64410a7fa47cd123076f7d',
     messagingSenderId: '459443909960',
     projectId: 'restaurant-eea70',
     storageBucket: 'restaurant-eea70.firebasestorage.app',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBRlVZFULmz-PrnfVcPp8rwm14vJMZhZ-k',
+  static FirebaseOptions ios = FirebaseOptions(
+    apiKey: dotenv.env['API_KEY_ios']!,
     appId: '1:459443909960:ios:5a86d66b45e91c19076f7d',
     messagingSenderId: '459443909960',
     projectId: 'restaurant-eea70',

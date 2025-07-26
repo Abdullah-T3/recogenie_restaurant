@@ -1,7 +1,7 @@
 import '../models/cart_item.dart';
 import 'package:injectable/injectable.dart';
 
-@injectable
+@singleton
 class CartRepository {
   final List<CartItem> _cart = [];
 

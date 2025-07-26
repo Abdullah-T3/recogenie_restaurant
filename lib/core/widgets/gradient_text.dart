@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../theme/app_theme.dart';
 
 class GradientText extends StatelessWidget {
   final String text;
@@ -10,14 +10,14 @@ class GradientText extends StatelessWidget {
   final TextOverflow? overflow;
 
   const GradientText({
-    Key? key,
+    super.key,
     required this.text,
     this.style,
     this.colors,
     this.textAlign,
     this.maxLines,
     this.overflow,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,6 +6,8 @@ import 'package:recogenie_restaurant/features/auth/presentation/cubit/auth_cubit
 import 'package:recogenie_restaurant/features/menu/presentation/cubit/menu_cubit.dart';
 
 import '../../features/auth/presentation/screens/login_screen.dart';
+import '../../features/auth/presentation/screens/sign_up_screen.dart';
+import '../../features/auth/presentation/screens/profile_screen.dart';
 import '../../features/menu/presentation/screens/menu_page.dart';
 import '../../features/cart/presentation/cart_page.dart';
 import 'routs.dart';
@@ -27,11 +29,15 @@ class AppRouter {
       final authRepository = getIt<AuthRepository>();
       final isAuthenticated = authRepository.currentUser != null;
 
-      if (isAuthenticated && state.matchedLocation == Routes.loginScreen) {
+      if (isAuthenticated &&
+          (state.matchedLocation == Routes.loginScreen ||
+              state.matchedLocation == Routes.signUpScreen)) {
         return Routes.menuScreen;
       }
 
-      if (!isAuthenticated && state.matchedLocation != Routes.loginScreen) {
+      if (!isAuthenticated &&
+          state.matchedLocation != Routes.loginScreen &&
+          state.matchedLocation != Routes.signUpScreen) {
         return Routes.loginScreen;
       }
 
@@ -44,6 +50,22 @@ class AppRouter {
         builder: (context, state) => BlocProvider(
           create: (context) => getIt<AuthCubit>(),
           child: const LoginScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.signUpScreen,
+        name: 'signup',
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<AuthCubit>(),
+          child: const SignUpScreen(),
+        ),
+      ),
+      GoRoute(
+        path: Routes.profileScreen,
+        name: 'profile',
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<AuthCubit>(),
+          child: const ProfileScreen(),
         ),
       ),
       GoRoute(

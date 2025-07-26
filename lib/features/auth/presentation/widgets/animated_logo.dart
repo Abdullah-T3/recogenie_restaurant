@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class AnimatedLogo extends StatelessWidget {
-  final double size;
+  final Deviceinfo deviceinfo;
   final IconData icon;
   final Color? color;
   final Duration? duration;
   final VoidCallback? onTap;
 
   const AnimatedLogo({
-    Key? key,
-    this.size = 120,
+    super.key,
     this.icon = Icons.restaurant_menu,
     this.color,
     this.duration,
     this.onTap,
-  }) : super(key: key);
+    required this.deviceinfo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,8 @@ class AnimatedLogo extends StatelessWidget {
           child: GestureDetector(
             onTap: onTap,
             child: Container(
-              width: size,
-              height: size,
+              width: deviceinfo.screenWidth * 0.2,
+              height: deviceinfo.screenWidth * 0.2,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
@@ -54,7 +55,7 @@ class AnimatedLogo extends StatelessWidget {
               ),
               child: Icon(
                 icon,
-                size: size * 0.5,
+                size: deviceinfo.screenWidth * 0.1,
                 color: color ?? AppTheme.primaryColor,
               ),
             ),

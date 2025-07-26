@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
+import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
+import '../theme/app_theme.dart';
 
 class GradientButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final bool isLoading;
   final IconData? icon;
-  final double height;
   final List<Color>? colors;
   final TextStyle? textStyle;
   final BorderRadius? borderRadius;
-
+  final Deviceinfo deviceinfo;
   const GradientButton({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
     this.isLoading = false,
     this.icon,
-    this.height = 60,
     this.colors,
     this.textStyle,
     this.borderRadius,
-  }) : super(key: key);
+    required this.deviceinfo,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: height,
+      height: deviceinfo.screenHeight * 0.07,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         decoration: BoxDecoration(
@@ -36,13 +36,15 @@ class GradientButton extends StatelessWidget {
                 ? [AppTheme.textHintColor, AppTheme.textHintColor]
                 : colors ?? [AppTheme.primaryColor, AppTheme.primaryDarkColor],
           ),
-          borderRadius: borderRadius ?? BorderRadius.circular(16),
+          borderRadius:
+              borderRadius ??
+              BorderRadius.circular(deviceinfo.screenWidth * 0.05),
           boxShadow: isLoading
               ? []
               : [
                   BoxShadow(
                     color: AppTheme.primaryColor.withOpacity(0.3),
-                    blurRadius: 12,
+                    blurRadius: deviceinfo.screenWidth * 0.02,
                     offset: const Offset(0, 6),
                   ),
                 ],
@@ -50,13 +52,15 @@ class GradientButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: borderRadius ?? BorderRadius.circular(16),
+            borderRadius:
+                borderRadius ??
+                BorderRadius.circular(deviceinfo.screenWidth * 0.05),
             onTap: isLoading ? null : onPressed,
             child: Center(
               child: isLoading
-                  ? const SizedBox(
-                      width: 24,
-                      height: 24,
+                  ? SizedBox(
+                      width: deviceinfo.screenWidth * 0.06,
+                      height: deviceinfo.screenWidth * 0.06,
                       child: CircularProgressIndicator(
                         color: Colors.white,
                         strokeWidth: 2,
@@ -66,15 +70,19 @@ class GradientButton extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         if (icon != null) ...[
-                          Icon(icon, color: Colors.white, size: 20),
-                          const SizedBox(width: 8),
+                          Icon(
+                            icon,
+                            color: Colors.white,
+                            size: deviceinfo.screenWidth * 0.05,
+                          ),
+                          SizedBox(width: deviceinfo.screenWidth * 0.02),
                         ],
                         Text(
                           text,
                           style:
                               textStyle ??
                               AppTheme.button.copyWith(
-                                fontSize: 18,
+                                fontSize: deviceinfo.screenWidth * 0.04,
                                 fontWeight: FontWeight.w700,
                               ),
                         ),

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:recogenie_restaurant/core/Responsive/UiComponents/InfoWidget.dart';
 import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
 import 'package:recogenie_restaurant/core/helper/cherryToast/CherryToastMsgs.dart';
 import 'package:recogenie_restaurant/features/auth/presentation/widgets/sign_up_link.dart';
+import '../../../../core/routing/routs.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../cubit/auth_cubit.dart';
 import '../widgets/animated_logo.dart';
-import '../widgets/gradient_text.dart';
+import '../../../../core/widgets/gradient_text.dart';
 import '../widgets/login_form.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -125,7 +127,6 @@ class _LoginScreenState extends State<LoginScreen>
                           ),
                         ),
                       ),
-
                       SizedBox(height: deviceInfo.screenHeight * 0.03),
                       FadeTransition(
                         opacity: _fadeAnimation,
@@ -134,7 +135,12 @@ class _LoginScreenState extends State<LoginScreen>
                       SizedBox(height: deviceInfo.screenHeight * 0.03),
                       FadeTransition(
                         opacity: _fadeAnimation,
-                        child: SignUpLink(onSignUp: () {}),
+                        child: SignUpLink(
+                          onSignUp: () {
+                            authCubit.clearControllers();
+                            context.go(Routes.signUpScreen);
+                          },
+                        ),
                       ),
                     ],
                   ),
@@ -151,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen>
     return Column(
       children: [
         AnimatedLogo(
-          size: deviceInfo.screenHeight * 0.13,
+          deviceinfo: deviceInfo,
           icon: Icons.restaurant_menu,
           color: AppTheme.primaryColor,
         ),

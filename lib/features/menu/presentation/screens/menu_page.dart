@@ -8,10 +8,18 @@ import 'package:recogenie_restaurant/core/helper/cherryToast/CherryToastMsgs.dar
 import '../../../../core/routing/routs.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/di/injection.dart';
+import '../../../../core/widgets/cached_image_widget.dart';
+import '../../../../core/widgets/search_text_field.dart';
+import '../../../../core/widgets/empty_state_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
+import '../../../../core/widgets/item_card.dart';
+import '../../../../core/widgets/category_badge.dart';
+import '../../../../core/widgets/price_display.dart';
 import '../../data/models/menu_item.dart';
 import '../cubit/menu_cubit.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
 import '../../../cart/presentation/cubit/cart_state.dart';
+import '../../../auth/presentation/cubit/auth_cubit.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -71,11 +79,16 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<CartCubit>(),
+    return BlocProvider.value(
+      value: getIt<CartCubit>(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Our Menu'),
+          leading: IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () => context.push(Routes.profileScreen),
+            tooltip: 'Profile',
+          ),
           backgroundColor: AppTheme.primaryColor,
           foregroundColor: Colors.white,
           actions: [
@@ -191,8 +204,9 @@ class _MenuPageState extends State<MenuPage> {
     }
 
     // Initial state
-    return const Center(
-      child: CircularProgressIndicator(color: AppTheme.primaryColor),
+    return const LoadingWidget(
+      color: AppTheme.primaryColor,
+      message: 'Loading menu items...',
     );
   }
 
@@ -206,40 +220,18 @@ class _MenuPageState extends State<MenuPage> {
           child: Column(
             children: [
               SizedBox(height: deviceinfo.screenHeight * 0.01),
-              TextField(
-                onTapOutside: (_) {
-                  FocusScope.of(context).unfocus();
-                },
+              SearchTextField(
                 controller: _searchController,
+                hintText: 'Search menu items...',
                 onChanged: (query) {
                   _filterMenuItems(menuItems, query);
                 },
-                decoration: InputDecoration(
-                  hintText: 'Search menu items...',
-                  hintStyle: AppTheme.bodyText2.copyWith(
-                    color: AppTheme.textHintColor,
-                  ),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: AppTheme.textSecondaryColor,
-                  ),
-                  suffixIcon: _searchController.text.isNotEmpty
-                      ? IconButton(
-                          icon: Icon(
-                            Icons.clear,
-                            color: AppTheme.textSecondaryColor,
-                          ),
-                          onPressed: () {
-                            _searchController.clear();
-                            _filterMenuItems(menuItems, '');
-                          },
-                        )
-                      : null,
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: deviceinfo.screenHeight * 0.01,
-                    horizontal: deviceinfo.screenWidth * 0.04,
-                  ),
+                onClear: () {
+                  _filterMenuItems(menuItems, '');
+                },
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: deviceinfo.screenHeight * 0.01,
+                  horizontal: deviceinfo.screenWidth * 0.04,
                 ),
               ),
 
@@ -274,62 +266,20 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Widget _buildEmptyState(Deviceinfo deviceinfo) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.restaurant_menu,
-            size: deviceinfo.screenHeight * 0.1,
-            color: AppTheme.textSecondaryColor,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'No menu items available',
-            style: AppTheme.headline4.copyWith(
-              color: AppTheme.textSecondaryColor,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Check back later for our delicious menu',
-            style: AppTheme.bodyText2.copyWith(
-              color: AppTheme.textSecondaryColor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+    return EmptyStateWidget(
+      icon: Icons.restaurant_menu,
+      title: 'No menu items available',
+      subtitle: 'Check back later for our delicious menu',
+      iconSize: deviceinfo.screenHeight * 0.1,
     );
   }
 
   Widget _buildNoSearchResults(Deviceinfo deviceinfo) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.search_off,
-            size: deviceinfo.screenWidth * 0.02,
-            color: AppTheme.textSecondaryColor,
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'No items found',
-            style: AppTheme.headline4.copyWith(
-              color: AppTheme.textSecondaryColor,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Try adjusting your search terms',
-            style: AppTheme.bodyText2.copyWith(
-              color: AppTheme.textSecondaryColor,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+    return EmptyStateWidget(
+      icon: Icons.search_off,
+      title: 'No items found',
+      subtitle: 'Try adjusting your search terms',
+      iconSize: deviceinfo.screenWidth * 0.15,
     );
   }
 
@@ -344,150 +294,66 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Widget _buildMenuItemCard(MenuItem menuItem, Deviceinfo deviceinfo) {
-    return Container(
+    return ItemCard(
+      font: deviceinfo.screenWidth * 0.037,
+      imageUrl: menuItem.imageUrl ?? '',
+      title: menuItem.name,
+      description: menuItem.description ?? '',
+      category: menuItem.category,
+      price: menuItem.price,
+      cacheKey: 'menu_${menuItem.id}',
+      imageWidth: deviceinfo.screenWidth * 0.2,
+      imageHeight: deviceinfo.screenWidth * 0.2,
+      borderRadius: deviceinfo.screenWidth * 0.04,
       margin: EdgeInsets.only(bottom: deviceinfo.screenHeight * 0.02),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceColor,
-        borderRadius: BorderRadius.circular(deviceinfo.screenWidth * 0.04),
-        boxShadow: [
-          BoxShadow(
-            color: AppTheme.shadowColor,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(deviceinfo.screenWidth * 0.04),
-        child: Row(
-          children: [
-            Container(
-              width: deviceinfo.screenWidth * 0.2,
-              height: deviceinfo.screenWidth * 0.2,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                  deviceinfo.screenWidth * 0.04,
-                ),
-                color: AppTheme.backgroundColor,
-              ),
-              child: menuItem.imageUrl != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(
-                        deviceinfo.screenWidth * 0.04,
-                      ),
-                      child: CachedNetworkImage(
-                        imageUrl: menuItem.imageUrl!,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: AppTheme.backgroundColor,
-                          child: const Icon(
-                            Icons.restaurant,
-                            color: AppTheme.textSecondaryColor,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: AppTheme.backgroundColor,
-                          child: const Icon(
-                            Icons.error,
-                            color: AppTheme.errorColor,
-                          ),
-                        ),
-                      ),
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          deviceinfo.screenWidth * 0.04,
-                        ),
-                        color: AppTheme.backgroundColor,
-                      ),
-                      child: const Icon(
-                        Icons.restaurant,
-                        color: AppTheme.textSecondaryColor,
-                      ),
-                    ),
-            ),
+      padding: EdgeInsets.all(deviceinfo.screenWidth * 0.04),
+      trailing: IconButton(
+        onPressed: () {
+          getIt<CartCubit>().addMenuItemToCart(
+            id: menuItem.id,
+            name: menuItem.name,
+            price: menuItem.price,
+            imageUrl: menuItem.imageUrl,
+          );
 
-            SizedBox(width: deviceinfo.screenWidth * 0.04),
-
-            // Food Details
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    menuItem.name,
-                    style: AppTheme.headline4.copyWith(
-                      fontSize: deviceinfo.screenWidth * 0.04,
-                      color: AppTheme.textPrimaryColor,
-                    ),
-                  ),
-
-                  SizedBox(height: deviceinfo.screenHeight * 0.005),
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: deviceinfo.screenWidth * 0.02,
-                      vertical: deviceinfo.screenHeight * 0.005,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppTheme.primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(
-                        deviceinfo.screenWidth * 0.02,
-                      ),
-                    ),
-                    child: Text(
-                      menuItem.category!,
-                      style: AppTheme.bodyText2.copyWith(
-                        fontSize: deviceinfo.screenWidth * 0.035,
-                        color: AppTheme.primaryColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: deviceinfo.screenHeight * 0.005),
-                  Text(
-                    menuItem.description!,
-                    style: AppTheme.bodyText2.copyWith(
-                      fontSize: 12,
-                      color: AppTheme.textSecondaryColor,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
-
-                  Text(
-                    '\$${menuItem.price.toStringAsFixed(2)}',
-                    style: AppTheme.headline4.copyWith(
-                      fontSize: 16,
-                      color: AppTheme.primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            SizedBox(width: deviceinfo.screenWidth * 0.02),
-            IconButton(
-              onPressed: () {
-                CherryToastMsgs.CherryToastSuccess(
-                  context: context,
-                  title: 'Added to Cart',
-                  description: '${menuItem.name} has been added to your cart.',
-                  info: deviceinfo,
-                ).show(context);
-              },
-
-              icon: Icon(
-                Icons.add_shopping_cart,
-                color: AppTheme.primaryColor,
-                size: deviceinfo.screenWidth * 0.08,
-              ),
-            ),
-          ],
+          CherryToastMsgs.CherryToastSuccess(
+            context: context,
+            title: 'Added to Cart',
+            description: '${menuItem.name} has been added to your cart.',
+            info: deviceinfo,
+          ).show(context);
+        },
+        icon: Icon(
+          Icons.add_shopping_cart,
+          color: AppTheme.primaryColor,
+          size: deviceinfo.screenWidth * 0.08,
         ),
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                getIt<AuthCubit>().signOut();
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

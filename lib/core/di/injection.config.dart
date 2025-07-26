@@ -18,14 +18,11 @@ import 'package:recogenie_restaurant/features/auth/data/repo/auth_repository.dar
     as _i818;
 import 'package:recogenie_restaurant/features/cart/data/repo/cart_repository.dart'
     as _i569;
-import 'package:recogenie_restaurant/features/cart/presentation/cubit/cart_cubit.dart'
-    as _i570;
-import 'package:recogenie_restaurant/features/menu/data/repo/menu_repository.dart'
-    as _i668;
-import 'package:recogenie_restaurant/features/menu/presentation/cubit/menu_cubit.dart'
-    as _i93;
-import 'package:recogenie_restaurant/features/auth/presentation/cubit/auth_cubit.dart'
-    as _i415;
+
+import '../../features/auth/presentation/cubit/auth_cubit.dart';
+import '../../features/cart/presentation/cubit/cart_cubit.dart';
+import '../../features/menu/data/repo/menu_repository.dart';
+import '../../features/menu/presentation/cubit/menu_cubit.dart';
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -35,24 +32,18 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     final firebaseModule = _$FirebaseModule();
-    gh.factory<_i569.CartRepository>(() => _i569.CartRepository());
+    gh.singleton<_i569.CartRepository>(() => _i569.CartRepository());
     gh.lazySingleton<_i59.FirebaseAuth>(() => firebaseModule.firebaseAuth);
     gh.lazySingleton<_i974.FirebaseFirestore>(() => firebaseModule.firestore);
-    gh.factory<_i668.MenuRepository>(
-      () => _i668.MenuRepository(gh<_i974.FirebaseFirestore>()),
+    gh.factory<MenuRepository>(
+      () => MenuRepository(gh<_i974.FirebaseFirestore>()),
     );
-    gh.factory<_i93.MenuCubit>(
-      () => _i93.MenuCubit(gh<_i668.MenuRepository>()),
-    );
-    gh.factory<_i570.CartCubit>(
-      () => _i570.CartCubit(gh<_i569.CartRepository>()),
-    );
+    gh.factory<MenuCubit>(() => MenuCubit(gh<MenuRepository>()));
+    gh.singleton<CartCubit>(() => CartCubit(gh<_i569.CartRepository>()));
     gh.factory<_i818.AuthRepository>(
       () => _i818.AuthRepository(gh<_i59.FirebaseAuth>()),
     );
-    gh.factory<_i415.AuthCubit>(
-      () => _i415.AuthCubit(gh<_i818.AuthRepository>()),
-    );
+    gh.factory<AuthCubit>(() => AuthCubit(gh<_i818.AuthRepository>()));
     return this;
   }
 }

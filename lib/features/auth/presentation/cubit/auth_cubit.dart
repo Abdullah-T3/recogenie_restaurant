@@ -11,6 +11,8 @@ class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   AuthCubit(this._authRepository) : super(AuthInitial());
 
   Future<void> signInWithEmail() async {
@@ -39,25 +41,36 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> signUpWithEmail(String email, String password) async {
+  Future<void> signUpWithEmail() async {
     emit(AuthLoading());
     try {
-      if (email.isEmpty || password.isEmpty) {
-        emit(AuthFailure('Email and password cannot be empty.'));
+      if (emailController.text.isEmpty ||
+          passwordController.text.isEmpty ||
+          nameController.text.isEmpty) {
+        emit(AuthFailure('All fields are required.'));
         return;
       }
-      if (password.length < 6) {
+      if (passwordController.text.length < 6) {
         emit(AuthFailure('Password must be at least 6 characters long.'));
         return;
       }
-      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email)) {
+      if (passwordController.text != confirmPasswordController.text) {
+        emit(AuthFailure('Passwords do not match.'));
+        return;
+      }
+      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(emailController.text)) {
         emit(AuthFailure('Invalid email format.'));
         return;
       }
 
-      final user = await _authRepository.signUpWithEmail(email, password);
+      final user = await _authRepository.signUpWithEmail(
+        emailController.text,
+        passwordController.text,
+        nameController.text,
+      );
       if (user != null) {
         emit(AuthSuccess(user));
+        AppRouter.refreshAuth(); // Refresh router to handle redirect
       } else {
         emit(AuthFailure('Sign up failed'));
       }
@@ -80,5 +93,21 @@ class AuthCubit extends Cubit<AuthState> {
   void clearControllers() {
     emailController.clear();
     passwordController.clear();
+    confirmPasswordController.clear();
+    nameController.clear();
+  }
+
+  Future<void> checkAuthState() async {
+    emit(AuthLoading());
+    try {
+      final user = _authRepository.currentUser;
+      if (user != null) {
+        emit(AuthSuccess(user));
+      } else {
+        emit(AuthInitial());
+      }
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
   }
 }

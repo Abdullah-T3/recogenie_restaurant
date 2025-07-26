@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../core/theme/app_theme.dart';
+import '../theme/app_theme.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
@@ -16,7 +16,7 @@ class CustomTextField extends StatefulWidget {
   final int? maxLength;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.labelText,
     this.hintText,
@@ -29,7 +29,7 @@ class CustomTextField extends StatefulWidget {
     this.enabled = true,
     this.maxLines = 1,
     this.maxLength,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -44,6 +44,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       controller: widget.controller,
       keyboardType: widget.keyboardType,
       obscureText: _obscurePassword && widget.obscureText,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       enabled: widget.enabled,
       maxLines: widget.maxLines,
       maxLength: widget.maxLength,

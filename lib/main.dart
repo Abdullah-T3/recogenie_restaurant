@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'core/di/injection.dart';
 
 import 'core/routing/app_router.dart';
@@ -8,6 +9,16 @@ import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    // Load environment variables
+    await dotenv.load(fileName: ".env");
+    print('✅ Environment variables loaded successfully');
+  } catch (e) {
+    print('⚠️ Warning: Could not load .env file: $e');
+    print('⚠️ Make sure the .env file exists and has proper UTF-8 encoding');
+  }
+
   await Firebase.initializeApp();
   //addMenuData(); //todo Uncomment to add initial menu data
   configureDependencies();

@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import '../../../../core/widgets/card_container.dart';
 import '../../../../core/theme/app_theme.dart';
 
-class SignUpLink extends StatelessWidget {
-  final VoidCallback? onSignUp;
+class LoginLink extends StatelessWidget {
+  final VoidCallback? onLogin;
   final String questionText;
   final String actionText;
 
-  const SignUpLink({
+  const LoginLink({
     super.key,
-    this.onSignUp,
-    this.questionText = "Don't have an account? ",
-    this.actionText = 'Sign Up',
+    this.onLogin,
+    this.questionText = "Already have an account? ",
+    this.actionText = 'Sign In',
   });
 
   @override
@@ -28,7 +28,7 @@ class SignUpLink extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: onSignUp,
+            onPressed: onLogin,
             style: TextButton.styleFrom(
               padding: EdgeInsets.zero,
               minimumSize: Size.zero,

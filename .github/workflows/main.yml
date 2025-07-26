@@ -27,4 +27,4 @@ jobs:
           flutter analyze || true
 
       - name: 🏗️ Run Build
-        run: flutter build apk --realease
+        run: flutter build apk --release

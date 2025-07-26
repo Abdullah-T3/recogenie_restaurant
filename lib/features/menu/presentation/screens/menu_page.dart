@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:recogenie_restaurant/core/Responsive/UiComponents/InfoWidget.dart';
-import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
-import 'package:recogenie_restaurant/core/helper/cherryToast/CherryToastMsgs.dart';
+import '../../../../core/Responsive/UiComponents/InfoWidget.dart';
+import '../../../../core/Responsive/models/DeviceInfo.dart';
+import '../../../../core/helper/cherryToast/CherryToastMsgs.dart';
 import '../../../../core/routing/routs.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/di/injection.dart';
-import '../../../../core/widgets/cached_image_widget.dart';
 import '../../../../core/widgets/search_text_field.dart';
 import '../../../../core/widgets/empty_state_widget.dart';
 import '../../../../core/widgets/loading_widget.dart';
 import '../../../../core/widgets/item_card.dart';
-import '../../../../core/widgets/category_badge.dart';
-import '../../../../core/widgets/price_display.dart';
 import '../../data/models/menu_item.dart';
 import '../cubit/menu_cubit.dart';
 import '../../../cart/presentation/cubit/cart_cubit.dart';
@@ -329,31 +325,6 @@ class _MenuPageState extends State<MenuPage> {
           size: deviceinfo.screenWidth * 0.08,
         ),
       ),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to logout?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                getIt<AuthCubit>().signOut();
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:recogenie_restaurant/core/Responsive/UiComponents/InfoWidget.dart';
-import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
-import 'package:recogenie_restaurant/core/helper/cherryToast/CherryToastMsgs.dart';
-import 'package:recogenie_restaurant/features/auth/presentation/widgets/login_link.dart';
+import '../../../../core/Responsive/UiComponents/InfoWidget.dart';
+import '../../../../core/Responsive/models/DeviceInfo.dart';
+import '../../../../core/helper/cherryToast/CherryToastMsgs.dart';
+import '../widgets/login_link.dart';
 import '../../../../core/routing/routs.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../cubit/auth_cubit.dart';

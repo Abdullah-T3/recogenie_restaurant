@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
+import '../../../../core/Responsive/models/DeviceInfo.dart';
 import '../../../../core/theme/app_theme.dart';
 
 class AnimatedLogo extends StatelessWidget {

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:recogenie_restaurant/core/Responsive/UiComponents/InfoWidget.dart';
-import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
-import 'package:recogenie_restaurant/core/helper/cherryToast/CherryToastMsgs.dart';
+import '../../../core/Responsive/UiComponents/InfoWidget.dart';
+import '../../../core/Responsive/models/DeviceInfo.dart';
+import '../../../core/helper/cherryToast/CherryToastMsgs.dart';
 import '../../../core/routing/routs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/di/injection.dart';
-import '../../../core/widgets/cached_image_widget.dart';
 import '../../../core/widgets/empty_state_widget.dart';
 import '../../../core/widgets/quantity_selector.dart';
 import '../../../core/widgets/price_display.dart';
@@ -16,7 +14,6 @@ import '../../../core/widgets/item_card.dart';
 import '../data/models/cart_item.dart';
 import 'cubit/cart_cubit.dart';
 import 'cubit/cart_state.dart';
-import '../../auth/presentation/cubit/auth_cubit.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -235,31 +232,6 @@ class CartPage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to logout?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                getIt<AuthCubit>().signOut();
-              },
-              child: const Text('Logout'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

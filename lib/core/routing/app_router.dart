@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:recogenie_restaurant/core/di/injection.dart';
-import 'package:recogenie_restaurant/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:recogenie_restaurant/features/menu/presentation/cubit/menu_cubit.dart';
+import '../di/injection.dart';
+import '../../features/auth/presentation/cubit/auth_cubit.dart';
+import '../../features/menu/presentation/cubit/menu_cubit.dart';
 
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/sign_up_screen.dart';

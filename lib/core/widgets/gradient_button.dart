@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
+import '../Responsive/models/DeviceInfo.dart';
 import '../theme/app_theme.dart';
 
 class GradientButton extends StatelessWidget {

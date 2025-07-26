@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recogenie_restaurant/core/Responsive/models/DeviceInfo.dart';
+import '../../../../core/Responsive/models/DeviceInfo.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../core/widgets/card_container.dart';

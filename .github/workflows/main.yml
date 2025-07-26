@@ -1,0 +1,29 @@
+name: Flutter CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🔄 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0' # change to your Flutter version
+
+      - name: 📦 Install Dependencies
+        run: flutter pub get
+
+      - name: 🧪 Run Analyzer
+        run: flutter analyze
+
+      - name: 🏗️ Run Build
+        run: flutter build apk --debug
